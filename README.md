@@ -2,7 +2,7 @@
 Proof of concept for Javascript + WebDriverIO
 
 Prerequisites:
-  - Node.js
+  - Node.js => https://nodejs.org/es/
 
 To have all up and running 
 
