@@ -8,15 +8,12 @@ describe('Login page', () => {
   it('should log in to home page', () => {
     browser.url('http://dev.intelligize.net');
     
-    browser.setValue('input[name=\'username\']','asd@asd.com'); 
-
-    var passwordBox = browser.setValue('input[name=\'password\']','123');  
-    
-    var okButton = 'button';
-    browser.click(okButton);  
+    browser.setValue('input[name=\'username\']','asd@asd.com');
+    browser.setValue('input[name=\'password\']','123');
+    browser.click('button');
 
     browser.waitUntil(() => {
-      return browser.getUrl() === 'http://dev.intelligize.net/app/eo'
-     },5000,'No cazo una')   
+      return browser.getUrl() === 'http://dev.intelligize.net/app/eo';
+    }, 5000, 'Timeout waiting for redirect to /app/eo');
   });
 });
