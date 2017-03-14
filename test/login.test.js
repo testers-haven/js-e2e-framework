@@ -8,9 +8,9 @@ describe('Login page', () => {
   it('should log in to home page', () => {
     browser.url('http://dev.intelligize.net');
     
-    browser.setValue('input[name=\'username\']','asd@asd.com'); 
+    browser.setValue('input[name=\'username\']','usuario@mail.com'); 
 
-    var passwordBox = browser.setValue('input[name=\'password\']','123');  
+    var passwordBox = browser.setValue('input[name=\'password\']','contraseñaAlfaNumerica');  
     
     var okButton = 'button';
     browser.click(okButton);  
