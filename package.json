@@ -1,0 +1,27 @@
+{
+  "name": "webdriverio-poc",
+  "version": "0.0.1",
+  "description": "poc for webdriverio",
+  "main": "demoTest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saetabis1/WebDriverIO.PoC.git"
+  },
+  "keywords": [
+    "webdriverio",
+    "demo"
+  ],
+  "author": "Marca",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Saetabis1/WebDriverIO.PoC/issues"
+  },
+  "homepage": "https://github.com/Saetabis1/WebDriverIO.PoC#readme",
+  "dependencies": {
+    "selenium-standalone": "^6.0.1",
+    "webdriverio": "^4.6.2"
+  }
+}
