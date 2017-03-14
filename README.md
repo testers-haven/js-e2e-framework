@@ -3,6 +3,7 @@ Proof of concept for Javascript + WebDriverIO
 
 Prerequisites:
   - Node.js => https://nodejs.org/es/
+  - git clone repo
 
 To have all up and running 
 
