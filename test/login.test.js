@@ -4,4 +4,19 @@ describe('Login page', () => {
     const title = browser.getTitle();
     title.should.be.equal('Log In To Intelligize');
   });
+  
+  it('should log in to home page', () => {
+    browser.url('http://dev.intelligize.net');
+    
+    browser.setValue('input[name=\'username\']','asd@asd.com'); 
+
+    var passwordBox = browser.setValue('input[name=\'password\']','123');  
+    
+    var okButton = 'button';
+    browser.click(okButton);  
+
+    browser.waitUntil(() => {
+      return browser.getUrl() === 'http://dev.intelligize.net/app/eo'
+     },5000,'No cazo una')   
+  });
 });
