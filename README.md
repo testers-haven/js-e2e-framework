@@ -2,32 +2,42 @@
 # Framework & E2E tests
 * JS naming conventions [link](./docs/js-naming-conventions.md)
 
+
+### Projects covered with E2E tests(used in configuration):
+* template
+
 ### System requirements
+* Install Java: [link](https://www.oracle.com/java/technologies/downloads/#jdk19-mac). If you get this error ('error @wdio/selenium-standalone-service error selenium exited before it could start with code 1')
 * Node v12+ (will be installed automatically via Volta.sh)
 * Docker for allure reports(optional)
 ### Installation
 * `npm install`
 
 ### Usage
-* `npm run test -- --project=default --testEnv=staging` All tests within default project in Chrome(by default) browser.
-* `npm run test -- --project=default --testEnv=staging --suite login ` Run specific tests, which are grouped to suites.
-* `npm run test -- --project=default --testEnv=staging --spec ./projects/default/test/specs/redirects-promotions.js` Run one specific test file.
-* `npm run test:headless -- --project=default` Run default tests in headless mode
+* `npm run test -- --platform=DESKTOP_CHROME --project=template --testEnv=staging` All tests within template project in Chrome(by default) browser.
+* `npm run test -- --platform=DESKTOP_CHROME --project=template --site= --testEnv=staging --suite login ` Run specific tests, which are grouped to suites.
+* `npm run test -- --platform=DESKTOP_CHROME --project=template --testEnv=staging --spec ./projects/template/test/specs/template.spec.js` Run one specific test file.
 * `docker-compose up -d` It will spin up docker containers for local Allure reports, reports will be automatically generated every 40seconds(configured in `docker-compose.yml`)
 
 ### Reporting
 * Spec(CLI) - default, useful for local testing
-* Allure (by default works only in CI and can be found in CircleCI test run -> Artifacts -> index.html)
-  * before running tests, execute in CLI `docker-compose up -d`. Run some tests. Now browse `localhost:5252`
-  * or you can locally [download & install Allure](https://github.com/allure-framework/allure2) [Java required], run tests with `ENV=CI` and then execute in CLI: `allure open <report path>`
-* TestRail - custom implementation, reporting works in CI environment. Visit https://heathmont.testrail.io
+* Allure (by default works only in CI, tests are being sent to the centralized allure reporter
+via a client imported as a [npm package](https://www.npmjs.com/package/allure-service-client). For local setup, before running tests
+  * Execute in CLI `docker-compose up -d` .
+  * Browse to `localhost:5252` and login (In the docker-compose.yml is the user and password)
+  * Create your project in the server 
+  * Modify your `wdio.conf.js` in the onComplete hook the allure host, user and password to the correct ones 
+  * Run some tests with `ENV=CI`.
+  * Tests should be uploaded to your local allure
+* TestRail - custom implementation, reporting works in CI environment. Visit https://template.testrail.io
+  * You can find the implementation on the `wdio.conf.js` file and the custom reporter in `./reporter/json-testrail-reporter`
   * if for some reason you are testing it `locally` then don't forget to remove previous test-run results before new test run. TestRail results folder: `projects/<project_name>/out`
 
 ### Add new project
 In order to start new project and use existing shared helpers you need to:
-1. Create new folder under `projects` folder - e.g `projects/default2`
-2. Copy-paste `wdio.shared.conf.js` and browser specific config file(s) (`wdio.CHROME.conf.js`) from `projects/default/config` to `projects/default2/config`
-3. Add new folder(s) structure where u will have your tests (specs and PageObject files if needed) e.g `projects/default2/test/specs`
+1. Create new folder under `projects` folder - e.g `projects/template`
+2. Copy-paste `wdio.shared.conf.js` and browser specific config file(s) (`wdio.DESKTOP_CHROME.conf.js`) from `projects/template/config` to `projects/template/config`
+3. Add new folder(s) structure where u will have your tests (specs and PageObject files if needed) e.g `projects/template/test/specs`
 4. Modify `wdio.shared.conf.js` according to your needs:
    * `baseUrl` string of th or some mapping
    * `specs` - depending on the structure from point #3
@@ -37,6 +47,39 @@ In order to start new project and use existing shared helpers you need to:
    * `onPrepare` - modify according to your needs. Allure environment variables are defined here
    * `onComplete` - modify according to your needs. Allure and Testrail reporters logic is used there, so it might be not needed in your case.
 5. Add test file(s) in `specs` folder and you are ready to run tests locally. Refer to #Usage section.
+
+### How to execute tests in CI 
+
+To execute tests on circleci you will need to first push your tests into a branch, then you have 2 options
+#### Via circle-ci (For full regression) 
+1. Access circleci pipeline https://app.circleci.com/pipelines/
+2. Select your branch 
+3. Click on trigger pipeline button
+4. Add following obligatory parameters:
+   
+| Parameter type | Name        | Value                                                                           |
+|----------------|-------------|---------------------------------------------------------------------------------|
+| String         | project     | your project folder name (template )                                            |
+| String         | environment | your environment (t2, staging, prelive, live)                                   |
+
+5. Optional parameters
+
+| Parameter type | Name               | Value                                                                   |
+|----------------|--------------------|-------------------------------------------------------------------------|
+| String         | specFilter         | Specify specs to run                                                    |
+| String         | suitesFilter       | Specify suites to run                                                   |
+| boolean        | testrailReport     | Enables testrail report                                                 |
+| int            | testrailProjectId  | Id of the testrail project (Mandatory if testrailReport enabled)        |
+| int            | testrailPlanId     | Id of the testrail test plan (Mandatory if testrailReport enabled)      |
+| boolean        | xrayReport         | Enables xray report                                                     |
+| int            | xrayTestPlan       | Id of the xray test plan (Mandatory if XrayReport enabled)              |
+| int            | xrayTestExecution  | Id of the xray test execution                                           |
+| String         | site               | IF you have sites to run inside the project (template => sitetemplate)  |
+
+6. Click again on trigger pipeline button in popup 
+7. Wait until job its finished
+
+---
 
 # Webdriver.IO FAQ
 * Crash course on framework: [link](https://youtu.be/RJ2kwpzX8so)
