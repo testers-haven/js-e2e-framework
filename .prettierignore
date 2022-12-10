@@ -13,12 +13,8 @@ reports-local
 temp/
 .vscode/
 .vscode/**
-remote-schema.graphql
-test.mjs
-*.http
-out
-test.js
-test2.js
-reportUrl.txt
-local.log
-browserstack.err
+package-lock.json
+README.md
+*.graphql
+docs
+.husky

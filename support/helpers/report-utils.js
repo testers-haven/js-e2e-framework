@@ -1,21 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-
-export const generateAllureRequest = (resultsDir) => {
-  const fileNames = fs.readdirSync(resultsDir);
-  const files = [];
-  fileNames.forEach((fileName) => {
-    const rawContent = fs.readFileSync(`${resultsDir}/${fileName}`);
-    if (rawContent.length !== 0) {
-      let json = {
-        file_name: fileName,
-        content_base64: rawContent.toString('base64'),
-      };
-      files.push(json);
-    }
-  });
-  return { results: files };
-};
+import fs from "fs";
+import path from "path";
 
 const getDataFromFiles = (dir, filePattern) => {
   const fileNames = fs.readdirSync(dir).filter((file) => file.match(filePattern));
@@ -47,7 +31,7 @@ const writeJsonFile = (dir, mergedResults, fileName) => {
  * @param filePattern
  * @param customFileName - OPTIONAL - if passed, then aggregated results file will be created
  */
-const mergeResults = (dir, filePattern, customFileName = '') => {
+const mergeResults = (dir, filePattern, customFileName = "") => {
   const rawData = getDataFromFiles(dir, filePattern);
   const mergedResults = mergeData(rawData);
   if (customFileName) {

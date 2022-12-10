@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * TestRail API Wrapper
@@ -8,23 +8,23 @@ export default class TestRail {
   constructor(options) {
     this._validate(options);
 
-    this.baseURL = options.host.includes('https') ? options.host : `https://${options.host}`;
+    this.baseURL = options.host.includes("https") ? options.host : `https://${options.host}`;
     this.username = options.username;
     this.password = options.password;
 
-    axios.defaults.baseURL = this.baseURL + '/index.php?/api/v2';
-    axios.defaults.headers.common['Authorization'] = 'Basic ' + Buffer.from(this.username + ':' + this.password).toString('base64');
+    axios.defaults.baseURL = this.baseURL + "/index.php?/api/v2";
+    axios.defaults.headers.common["Authorization"] = "Basic " + Buffer.from(this.username + ":" + this.password).toString("base64");
   }
 
   _validate(options) {
     if (!options.host) {
-      throw new TestRailError('Host not provided');
+      throw new TestRailError("Host not provided");
     }
     if (!options.username) {
-      throw new TestRailError('Username not provided');
+      throw new TestRailError("Username not provided");
     }
     if (!options.password) {
-      throw new TestRailError('Password or token not provided');
+      throw new TestRailError("Password or token not provided");
     }
   }
 
@@ -36,24 +36,32 @@ export default class TestRail {
     return await axios.post(`/add_results_for_cases/${runId}`, { results: results });
   }
 
-  async getCases(projectId, suiteId, filters = '') {
+  async getCases(projectId, suiteId, filters = "") {
     const queryParams = this.queryCaseFilters(filters);
     return await axios.get(`/get_cases/${projectId}&suite_id=${suiteId}${queryParams}`);
+  }
+
+  async getSuites(projectId) {
+    return await axios.get(`/get_suites/${projectId}`);
+  }
+
+  async getPlan(planId) {
+    return await axios.get(`/get_plan/${planId}`);
   }
 
   queryCaseFilters(filters) {
     let val = [];
     if (filters !== undefined) {
       const val = Object.entries(filters).map((key) => {
-        let st = '';
-        if (key[1] !== '') {
+        let st = "";
+        if (key[1] !== "") {
           st = `&${key[0]}=${key[1]}`;
         } else {
           st = `&${key[0]}`;
         }
         return st;
       });
-      return val.toString().replace(/,&/g, '&');
+      return val.toString().replace(/,&/g, "&");
     }
     return val.toString();
   }
@@ -65,6 +73,6 @@ class TestRailError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, TestRailError);
     }
-    this.name = 'TestRailError';
+    this.name = "TestRailError";
   }
 }

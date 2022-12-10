@@ -1,0 +1,42 @@
+{
+  "extends": ["eslint:recommended", "plugin:wdio/recommended"],
+  "plugins": ["wdio"],
+  "overrides": [
+    {
+      "files": ["projects/**/*.spec.js"],
+      "plugins": ["jasmine"],
+      "rules": {
+        "jasmine/no-disabled-tests": "warn",
+        "jasmine/no-focused-tests": "error",
+        "jasmine/valid-expect": "error",
+        "jasmine/prefer-toBeUndefined": "error"
+      }
+    }
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true
+  },
+  "ignorePatterns": [
+    "**/config/*.js",
+    "*.graphql",
+    "tsconfig.json",
+    "**/package.json",
+    "**/package-lock.json",
+    "**/wdio.conf.js",
+    "**/out/*.json",
+    "**/*.png",
+    "**/*.xml",
+    "**/*.md"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-var": "warn",
+    // wdio
+    "wdio/no-pause": "warn"
+  }
+}
